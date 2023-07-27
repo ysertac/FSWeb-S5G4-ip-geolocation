@@ -39,7 +39,7 @@ async function ipAdresimiAl(){
 /*
 	ADIM 3: Argümanı sadece 1 nesne kabül eden bir fonksiyon oluşturun.
     DOM metotlarını ve özelliklerini kullanarak, şunları gerçekleştirin:
-	
+	NOT: API'den gelen bayrak url'i çalışmazsa alternatif olarak: https://flagsapi.com/
 	<div class="card">
 	<img src={ülke bayrağı url} />
 	<div class="card-info">
