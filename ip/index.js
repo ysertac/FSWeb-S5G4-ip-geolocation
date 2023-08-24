@@ -68,16 +68,19 @@ async function ipAdresimiAl() {
 
 //kodlar buraya gelecek
 
-console.log(ipAdresimiAl());
-console.log(benimIP);
 const cards = document.querySelector(".cards");
-const myIpAddress = "178.241.158.13";
-const url = `https://apis.ergineer.com/ipgeoapi/${myIpAddress}`;
-const geoData = axios.get(url);
-//const flagData = axios.get("https://restcountries.com/v3.1/name/turkey");
+const flagData = axios.get("https://restcountries.com/v3.1/name/turkey");
 
-geoData.then((response) => {
-  cards.append(cardMaker(response.data));
+ipAdresimiAl().then(() => {
+  const url = `https://apis.ergineer.com/ipgeoapi/${benimIP}`;
+  axios
+    .get(url)
+    .then((response) => {
+      cards.append(cardMaker(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 
 function cardMaker(data) {
@@ -85,7 +88,14 @@ function cardMaker(data) {
   card.classList = "card";
 
   const img = document.createElement("img");
-  img.setAttribute("src", "https://flagcdn.com/w320/tr.png");
+  flagData
+    .then((res) => {
+      let flag = res.data[0].flags.png;
+      return flag;
+    })
+    .then((res) => {
+      img.setAttribute("src", res);
+    });
   card.append(img);
 
   const cardInfo = document.createElement("div");
@@ -94,7 +104,7 @@ function cardMaker(data) {
 
   const cardHeader = document.createElement("h3");
   cardHeader.classList = "ip";
-  cardHeader.textContent = myIpAddress;
+  cardHeader.textContent = data.sorgu;
   cardInfo.append(cardHeader);
 
   const ulke = document.createElement("p");
@@ -103,7 +113,7 @@ function cardMaker(data) {
   cardInfo.append(ulke);
 
   const koordinat = document.createElement("p");
-  koordinat.textContent = `Enlem: ${data.enlem} Boylem: ${data.boylam}`;
+  koordinat.textContent = `Enlem: ${data.enlem} Boylam: ${data.boylam}`;
   cardInfo.append(koordinat);
 
   const sehir = document.createElement("p");
