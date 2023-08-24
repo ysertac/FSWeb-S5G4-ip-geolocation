@@ -1,26 +1,25 @@
 //axios import buraya gelecek
+import axios from "axios";
 
 var benimIP;
-
 
 // ------------ değiştirmeyin --------------
 // licensed to Ergineer 2022
 require("babel-core/register");
 require("babel-polyfill");
-async function ipAdresimiAl(){
-	await axios({
-		method: 'get',
-		url: 'https://apis.ergineer.com/ipadresim',
-	})
-	.then(function (response) {
-		return response.data
-	})
-	.then(function (a) {
-		benimIP=a
-	});
-}				
+async function ipAdresimiAl() {
+  await axios({
+    method: "get",
+    url: "https://apis.ergineer.com/ipadresim",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .then(function (a) {
+      benimIP = a;
+    });
+}
 // ------------ değiştirmeyin --------------
-
 
 /*
 	ADIM 1: axios kullanarak, aşağıdaki URL'ye GET sorgusu atacağız
@@ -67,6 +66,61 @@ async function ipAdresimiAl(){
 	Örnek dinamik URL kullanımı: var url = "https://apis.ergineer.com/ipgeoapi/"+benimIP; 
 */
 
-
-
 //kodlar buraya gelecek
+
+console.log(ipAdresimiAl());
+console.log(benimIP);
+const cards = document.querySelector(".cards");
+const myIpAddress = "178.241.158.13";
+const url = `https://apis.ergineer.com/ipgeoapi/${myIpAddress}`;
+const geoData = axios.get(url);
+//const flagData = axios.get("https://restcountries.com/v3.1/name/turkey");
+
+geoData.then((response) => {
+  cards.append(cardMaker(response.data));
+});
+
+function cardMaker(data) {
+  const card = document.createElement("div");
+  card.classList = "card";
+
+  const img = document.createElement("img");
+  img.setAttribute("src", "https://flagcdn.com/w320/tr.png");
+  card.append(img);
+
+  const cardInfo = document.createElement("div");
+  cardInfo.classList = "card-info";
+  card.append(cardInfo);
+
+  const cardHeader = document.createElement("h3");
+  cardHeader.classList = "ip";
+  cardHeader.textContent = myIpAddress;
+  cardInfo.append(cardHeader);
+
+  const ulke = document.createElement("p");
+  ulke.classList = "ulke";
+  ulke.textContent = `${data["ülke"]} (${data["ülkeKodu"]})`;
+  cardInfo.append(ulke);
+
+  const koordinat = document.createElement("p");
+  koordinat.textContent = `Enlem: ${data.enlem} Boylem: ${data.boylam}`;
+  cardInfo.append(koordinat);
+
+  const sehir = document.createElement("p");
+  sehir.textContent = `Şehir: ${data.şehir}`;
+  cardInfo.append(sehir);
+
+  const saat = document.createElement("p");
+  saat.textContent = `Saat dilimi: ${data.saatdilimi}`;
+  cardInfo.append(saat);
+
+  const para = document.createElement("p");
+  para.textContent = `Para birimi: ${data.parabirimi}`;
+  cardInfo.append(para);
+
+  const isp = document.createElement("p");
+  isp.textContent = `ISP: ${data.isp}`;
+  cardInfo.append(isp);
+
+  return card;
+}
